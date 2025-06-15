@@ -162,4 +162,23 @@ probabilidad_perder <- 1 - probabilidad_ganar
 ## Obteniendo asi todos los posibles resultados para cada enunciado ###############
 
 
+### Porbabilidad de cada suceso ###
 
+# Como ya antes lo habiamos calculado:
+
+# Probabilidad de obtener un Full (total resultados Full/ Total de resultados posibles)
+round(prob_full * 100, 4)
+
+# Probabildiad de obtener un Triple (total resultados triple/ total de resultados posibles)
+round(prob_triple * 100, 4)
+
+# Probabildiad de obtener una escalera (total resultados escaleras / total de resultados posibles)
+round(prob_escalera * 100, 4)
+
+# Probabilidad de no obtener ninguno de los anteriores (probabilidad de ninguno / total de resultados posibles)
+round(prob_ninguno * 100, 4)
+
+# Para verificar que todas nuestras probabilidades estan bien definidas su suma debe ser igual a 1, tomando en cuenta que son sucesos mutuamente excluyentes ##
+prob_escalera + prob_full + prob_triple + prob_ninguno
+
+####### Observamos que se cumple la propiedad #########
