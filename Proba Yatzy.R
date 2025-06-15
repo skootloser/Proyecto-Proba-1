@@ -81,3 +81,54 @@ print(paste("Resultados para Escalera:", total_resultados_escalera))
 ### De esta forma obtenemos el total de posibles resultados de obtener una escalera menor o mayor ##
 ## Explicacion: En este caso estamos tomando todos los resultados y el orden si importa,  ya que una asignación como (Dado 1=1, Dado 2=2, ..., Dado 5=5) es un resultado distinto entre ellos
 ## Ambas son escaleras, pero son secuencias únicas de números en los dados y como son dos tipos simplemente multiplicamos por 2.
+
+
+## Hallar la probabilidad de que una persona gane el juego ##
+
+## Para esto debemos conocer las probabilidades de cada suceso interpretados como puntos obtenidos, estos son obtener un triple, full o escalera, se dividen por el total de resultados posibles (Espacio muestral) ####
+
+## Estos son los resultados de cada suceso en una sola partida ##
+
+prob_full <- total_resultados_full / espacio_muestral
+prob_triple <- total_resultados_triple / espacio_muestral
+prob_escalera <- total_resultados_escalera / espacio_muestralç
+
+# Tambien podemos obtener la probabilidad contrario, que la persona no obtenga ningun puntaje
+
+prob_ninguno <- 1 - (prob_escalera + prob_full + prob_triple)
+# Nota: Esta suma de probabilidades no cuenta con interseccion puesto que los sucesos son mutuamente excluyentes
+
+# Ahora organizaremos los posibles eventos de ganar y sus probabilidades en vectores para facilitar los calculos #
+
+puntos_posibles <- c(10, 8, 5, 0)
+probabilidades_por_jugada <- c(prob_escalera, prob_full, prob_triple, prob_ninguno)
+
+## Calcular la probabilidad de ganar en base a su segunda jugada ##
+# La persona gana si acumula 12 puntos o mas al final de las dos partidas, estas son independientes entre si 
+
+# Calcular la suma de puntos para cada combinación posible de dos partidas trabajando con matrices ##
+
+# Creamos una matriz donde cada celda [i,j] es puntos_posibles[i] + puntos_posibles[j] y obtenemos los puntamos resultantes:
+suma_puntos_matriz <- outer(puntos_posibles, puntos_posibles, FUN = "+")
+# Nota: Esto solo nos genera los posibles puntos obtenidos por una sola partida
+
+# Calculamos ahora la probabilidad combinada para cada combinación posible en las dos partidas
+# Esto genera una matriz donde cada celda [i,j] es prob_partida_1[i] * prob_partida_2[j]
+
+probabilidad_combinada_matriz <- outer(probabilidades_por_jugada, probabilidades_por_jugada, FUN = "*")
+
+# Identificamos las combinaciones donde la suma de puntos es >= 12.
+
+condicion_ganadora <- suma_puntos_matriz >= 12
+
+# Finalmente sumamos las probabilidades solo para las combinaciones donde la condición se cumpla
+probabilidad_ganar <- sum(probabilidad_combinada_matriz[condicion_ganadora])
+
+## Obteniendo asi la probabilidad de ganar ##
+
+## Porbabildiad de perder ##
+
+probabilidad_perder <- 1 - probabilidad_ganar 
+
+#### Conseguimos mediante una matriz la probabildiad de que alguien gane el juego en dos lanzamientos y con el uso de principios probabilisticos encontramos la probabilidad de perder ###
+
