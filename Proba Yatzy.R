@@ -2,6 +2,10 @@
 
 ## Una persona realiza dos lanzamientos independientes de 5 dados, el puntaje es en base a las caras o números obtenidos de cada dado
 
+caras_dado <- 6
+num_dados <- 5
+espacio_muestral <- 6^5
+
 ## Primero evaluaremos los casos favorables donde el usario obtiene puntos a favor y sus propiedades
 
 ## Triple: Para el caso de Triple "(tres iguales y dos diferentes)" estamos hablando de permutaciones de un multiconjunto, o más simplemente, arreglos de objetos donde algunos son idénticos.
@@ -9,23 +13,71 @@
 ## Calculamos las diferentes maneras en que se puede obtener un Triple
 
 ## Tenemos n = 5 (dados),  n1 = 3 (dados con el mismo valor) , n2 = 1 (dado con un valor diferente) , n3 = 1 (dado con otro valor diferente)
-## Denotamos que el numero de casos de distribuir estos valores es una permutacion con repeticion
 
-caras_dado <- 6
-num_dados <- 5
+# 1. Elegir el valor para el trio
+# Concepto de Combinación C(6, 1)
+opciones_valor_triple_para_Triple <- choose(6, 1)
 
-# 1. Determinamos cuantos posibles resultados de par ordenado se puede obtener de los dados diferentes
+# 2. Elegir los posibles valores para el par diferente del numero escogido en el trio y entre ellos.
+# Concepto de Combinación C(5, 1)
+opciones_valores_diferentes_Triple <- choose(5, 2)
 
-opciones_dos_diferentes_para_triple <- choose(caras_dado - 1, 2) #funcion base para calcular el coeficiente binomial, leído como "n sobre k"
+# 3. Distribuir los 5 dados en las 5 posiciones, el orden seria (X,X,X,Y,Z) por ejemplo (1,1,1,2,3)
+# Concepto de Coeficiente Multinomial (5! / (3! * 1! * 1!))
+distribucion_posiciones_triple <- factorial(5) / (factorial(3) * factorial(1) * factorial(1))
 
-# 2. Número de formas de organizar los 5 dados en 5 posiciones: 5! / (3! * 1! * 1!) 
-# Se organizan de la forma: (X,X,X,Y,Z) siendo X, Y, Z numero de cada dado. Por ejemplos: (1,1,1,2,3)
+# 4. Obtener los posibles valores de obtener un Triple
+total_resultados_triple <- opciones_valor_triple_para_Triple* opciones_valores_diferentes_Triple * distribucion_posiciones_triple
+print(paste("Resultados para Triple:", total_resultados_triple))
 
-permutaciones_triple <- factorial(num_dados) / (factorial(3) * factorial(1) * factorial(1))
+## Obteniendo así los posibles resultados de un triple como el producto de una combinación con el coeficiente multinomial ###
+## Explicacion: Primero se elige un valor de 6 lo cual es el concepto de combinacion, luego se seleccionan dos valores que deben ser diferentes entre sí y diferentes del primer valor
+## en esta seleccion el orden no importa para definir los valores "unicos" que aparecen en el lanzamiento de los dados.
+## Para el arreglo final se debe evaluar los posibles resultados de ordenar 3 dados iguales y 2 diferentes entre sí, siendo esto un coeficiente binomial ###
 
-# 3. Obtener el número de casos favorables de obtener un Triple, asignando el puntaje obtenido
+### Casos para obtener Full ###
 
-casos_triple_5Puntos <- caras_dado * opciones_dos_diferentes_para_triple * permutaciones_triple
+## Un Full consiste en tres dados de un número y dos dados de un mismo número, los denotamos como (X,X,X,Y,Y) por ejemplo (1,1,1,2,2)
+## Para este caso contamos n = 5 dados, n1 = 3 dados iguales, n2 = dado de un numero diferente a n1 , n3 = dado igual a n2
+## Observamos que para este caso se trata de un problema de permutación con repetición o, más precisamente, de coeficiente multinomial. Es el número de formas de organizar 5 objetos, donde 3 son idénticos (el primer valor) y 2 son idénticos (el segundo valor).
 
-####### Obteniendo así la cantidad de resultados posibles para que el usuario obtenga 5 puntos o un triple #########
+# 1. Elegimos los posibles valores para el trio de Full
+# Concepto de combinación  C(6, 1)
+opciones_valor_triple_para_Full <- choose(6, 1) 
 
+# 2. Elegir los posibles valores para el par diferente del valor del trio
+# Concepto de Combinación C(5, 1)
+opciones_valor_par_Full<- choose(5, 1)
+
+# 3. Distribuir los valores en las 5 posiciones de los dados
+# Concepto de Coeficiente Multinomial (5! / (3! * 2!)) esto es equivalente a elegir 3 posiciones para el triplete de 5, C(5, 3)
+distribucion_posiciones_full <- choose(5, 3)
+
+# Por ultimo hayamos el total de posibles resultados de obtener un Full (8 puntos)
+
+total_resultados_full <- opciones_valor_triple_para_Full * opciones_valor_par_Full * distribucion_posiciones_full
+print(paste("Resultados para Full:", total_resultados_full))
+
+### Obteniendo asi los posibles resultados de obtener un Full como el productos de una combinacion y el coeficiente multinomial #####
+## Explicacion: estas son combinaciones porque el orden en que elegimos los valores X y Y no importan para definir la "clase" de valores que formarán el Full
+## Una vez que tienes los valores específicos este coeficiente cuenta las formas de organizar los 5 números en los 5 dados distinguibles. Es una forma de "permutación con repetición" de un multiconjunto.
+
+##### Casos de obtener una Escalera (Menor y Mayor) ####
+
+## Existen 2 casos de escalera: menor (1,2,3,4,5) y mayor (2,3,4,5,6) por lo cual podemos observar que se trata de una simple permutacion en ambos casos ##
+
+# 1. Número de tipos de escaleras (menor y mayor)
+# Conteo directo
+numero_tipos_escalera <- 2
+
+# 2. Obtener los valores para cada tipo de escalera
+# Concepto de Permutación 5!
+permutaciones_escalera <- factorial(5)
+
+# 3. Obtener el total de resultados posibles de conseguir una escalera
+total_resultados_escalera <- numero_tipos_escalera * permutaciones_escalera
+print(paste("Resultados para Escalera:", total_resultados_escalera))
+
+### De esta forma obtenemos el total de posibles resultados de obtener una escalera menor o mayor ##
+## Explicacion: En este caso estamos tomando todos los resultados y el orden si importa,  ya que una asignación como (Dado 1=1, Dado 2=2, ..., Dado 5=5) es un resultado distinto entre ellos
+## Ambas son escaleras, pero son secuencias únicas de números en los dados y como son dos tipos simplemente multiplicamos por 2.
