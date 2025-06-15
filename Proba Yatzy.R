@@ -112,17 +112,28 @@ probabilidades_por_jugada <- c(prob_escalera, prob_full, prob_triple, prob_ningu
 suma_puntos_matriz <- outer(puntos_posibles, puntos_posibles, FUN = "+")
 # Nota: Esto solo nos genera los posibles puntos obtenidos por una sola partida
 
-# Calculamos ahora la probabilidad combinada para cada combinación posible en las dos partidas
-# Esto genera una matriz donde cada celda [i,j] es prob_partida_1[i] * prob_partida_2[j]
+# 1. Creamos una matriz de probabilidades para la primera partida (como una columna)
+probabilidades_ganar_columna <- as.matrix(probabilidades_por_jugada)
 
-probabilidad_combinada_matriz <- outer(probabilidades_por_jugada, probabilidades_por_jugada, FUN = "*")
+# 2. Creamos una segunda matriz de probabilidades para la segunda partida (como una fila)
+probabilidades_ganar_fila <- t(probabilidades_ganar_columna) # t() calcula la transpuesta
+
+# 3. Multiplicamos las matrices columna por la matriz fila para obtener la matriz de productos
+# Esto es una multiplicación de matrices.
+probabilidad_ganar_combinada <- probabilidades_ganar_columna %*% probabilidades_ganar_fila
+
+print(probabilidad_ganar_combinada) # Observamos una matriz de las probabilidades de ganar en base a cada suceso
+
+## Esta matriz representa las probabilidades de cada posible combinación de resultados entre la Partida 1 y la Partida 2
+## Como las partidas son independientes, la probabilidad de que ambos eventos ocurran es simplemente el producto de sus probabilidades individuales
 
 # Identificamos las combinaciones donde la suma de puntos es >= 12.
 
-condicion_ganadora <- suma_puntos_matriz >= 12
+Puntaje_Ganador <- suma_puntos_matriz >= 12
 
-# Finalmente sumamos las probabilidades solo para las combinaciones donde la condición se cumpla
-probabilidad_ganar <- sum(probabilidad_combinada_matriz[condicion_ganadora])
+# Finalmente sumamos las probabilidades solo para las combinaciones donde la suma de puntos sea mayor igual a 12
+# Usamos la nueva matriz generada probabilidad_ganar_combinada
+probabilidad_ganar <- sum(probabilidad_ganar_combinada[Puntaje_Ganador])
 
 ## Obteniendo asi la probabilidad de ganar ##
 
