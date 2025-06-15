@@ -143,3 +143,23 @@ probabilidad_perder <- 1 - probabilidad_ganar
 
 #### Conseguimos mediante una matriz la probabildiad de que alguien gane el juego en dos lanzamientos y con el uso de principios probabilisticos encontramos la probabilidad de perder ###
 
+
+######### Obtener casos favorables y ninguno #######
+
+# Casos Favorables para escalera: 5!=120
+# Donde: 2×120=240
+
+# Casos Favorables para Full: C(6, 1) = 6 , C(5, 1) = 5 , orden posiciones 5!/3!*2! = 10
+# Donde: 6*5*10 = 300
+
+# Casos favorables para Triple: C(6, 1) = 6 , C(5, 2) = 10 orden posiciones 5!/3!*1!*1! = 20
+# Donde: 6*5*10 = 1200
+
+# Casos obtener Ninguno: Utilizamos propiedad de complemento
+# Suma de obtener alguno de los 3 sucesos: 120+300+1200 = 1740
+# Donde: 7776 (Probabilidad de todos los posibles resultados) - 1740(Suma de resultados a favor) = 6036
+
+## Obteniendo asi todos los posibles resultados para cada enunciado ###############
+
+
+
