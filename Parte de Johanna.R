@@ -120,7 +120,7 @@ all.equal(sum(escaleras), total_resultados_escalera)
 # Crearemos una tabla para verlo de una manera mas amigable
 comparacion_resultados <- data.frame(
   Tipo = c("Full", "Triple", "Escalera"),
-  Suma = c(sum(fulls), sum(triples), sum(escaleras)),
+  Valor= c(sum(fulls), sum(triples), sum(escaleras)),
   Total = c(total_resultados_full, total_resultados_triple, total_resultados_escalera),
   Coinciden = c(
     all.equal(sum(fulls), total_resultados_full) == TRUE,
