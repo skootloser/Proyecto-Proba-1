@@ -82,6 +82,9 @@ print(paste("Resultados para Escalera:", total_resultados_escalera))
 ## Explicacion: En este caso estamos tomando todos los resultados y el orden si importa,  ya que una asignación como (Dado 1=1, Dado 2=2, ..., Dado 5=5) es un resultado distinto entre ellos
 ## Ambas son escaleras, pero son secuencias únicas de números en los dados y como son dos tipos simplemente multiplicamos por 2.
 
+## Total de Ningunos ##
+total_ninguno <- espacio_muestral - (total_resultados_escalera + total_resultados_full + total_resultados_triple)
+total_ninguno
 
 ## Hallar la probabilidad de que una persona gane el juego ##
 
@@ -91,7 +94,7 @@ print(paste("Resultados para Escalera:", total_resultados_escalera))
 
 prob_full <- total_resultados_full / espacio_muestral
 prob_triple <- total_resultados_triple / espacio_muestral
-prob_escalera <- total_resultados_escalera / espacio_muestralç
+prob_escalera <- total_resultados_escalera / espacio_muestral
 
 # Tambien podemos obtener la probabilidad contrario, que la persona no obtenga ningun puntaje
 
@@ -182,3 +185,5 @@ round(prob_ninguno * 100, 4)
 prob_escalera + prob_full + prob_triple + prob_ninguno
 
 ####### Observamos que se cumple la propiedad #########
+
+
