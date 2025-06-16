@@ -109,26 +109,25 @@ View(resumen)
 
 ##7. Verifique que los resultados obtenidos en el apartado (6) se corresponde con lo obtenido en (2) y (3).
 
-###Para validar que los resultados obtenidos con paquetes de generación de permutaciones, variaciones y combinaciones corresponden  con los obtenidos mediante métodos con R base, se hara uso de la funcion all.equal(). Ya que la funcion verifica si los valores son numéricamente equivalentes, permitiendo pequeñas tolerancias en casos de redondeo o representación interna. 
-
 all.equal(sum(fulls), total_resultados_full)
 all.equal(sum(triples), total_resultados_triple)
 all.equal(sum(escaleras), total_resultados_escalera)
+all.equal(sum(nadas), total_ninguno)
 
+###Para validar que los resultados obtenidos con paquetes de generación de permutaciones, variaciones y combinaciones corresponden  con los obtenidos mediante métodos con R base, se hara uso de la funcion all.equal(). Ya que la funcion verifica si los valores son numéricamente equivalentes, permitiendo pequeñas tolerancias en casos de redondeo o representación interna. 
 
-
-# Crearemos una tabla para verlo de una manera mas amigable
 comparacion_resultados <- data.frame(
-  Tipo = c("Full", "Triple", "Escalera"),
-  Valor= c(sum(fulls), sum(triples), sum(escaleras)),
-  Total = c(total_resultados_full, total_resultados_triple, total_resultados_escalera),
+  Tipo = c("Full", "Triple", "Escalera", "Nadas"),
+  Valor = c(sum(fulls), sum(triples), sum(escaleras), sum(nadas)),
+  Total = c(total_resultados_full, total_resultados_triple, total_resultados_escalera, total_ninguno),
   Coinciden = c(
     all.equal(sum(fulls), total_resultados_full) == TRUE,
     all.equal(sum(triples), total_resultados_triple) == TRUE,
-    all.equal(sum(escaleras), total_resultados_escalera) == TRUE
+    all.equal(sum(escaleras), total_resultados_escalera) == TRUE,
+    all.equal(sum(nadas), total_ninguno) == TRUE
   )
 )
 
-# ver tabla
+# Mostrar la tabla
 print(comparacion_resultados)
 
