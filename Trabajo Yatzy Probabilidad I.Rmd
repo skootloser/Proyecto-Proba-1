@@ -9,6 +9,10 @@ Primero determinamos las variables escenciales de nuestro estudio "caras y numer
 ```{r Dados}
 caras_dado <- 6
 num_dados <- 5
+```
+
+Espacio Muestral para un solo lanzamiento:
+```{r Total de resultados posibles 1 lanzamiento}
 espacio_muestral <- caras_dado^num_dados
 ```
 
@@ -132,6 +136,11 @@ total_no_obtener_puntos <- espacio_muestral - (total_resultados_escalera + total
 ```{r}
 total_no_obtener_puntos
 ```
+Vector de total de resultados obtenibles en un lanzamiento:
+```{r}
+total_resultados_obtenibles <- c("Escaleras" = total_resultados_escalera, "Triple" = total_resultados_triple, "Full" = total_resultados_full, "Ninguno" = total_no_obtener_puntos)
+total_resultados_obtenibles
+```
 
 # Apartado 1: Hallar la probabilidad de que una persona gane el juego 
 
@@ -143,23 +152,15 @@ prob_triple <- total_resultados_triple / espacio_muestral
 prob_escalera <- total_resultados_escalera / espacio_muestral
 ```
 
-Observamos las probabilidades
-
-Probabilidad de obtener un Full:
-```{r}
-round(prob_full, 4)
-```
-Probabilidad de obtener un Triple:
-```{r}
-round(prob_triple, 4)
+Observamos las probabilidades:
+```{r Probabilidades de Sucesos}
+prob_escalera
+prob_triple
+prob_full
 ```
 
-Probabilidad de obtener una Escalera:
-```{r}
-round(prob_escalera, 4)
-```
+Estas son las probabilidades de obtener cada uno de los sucesos en un solo lanzamiento
 
-Estas son las probabilidades de obtener alguno de los sucesos en una sola jugada
 
 Adicionalmente poidemos encontrar la probabilidad de no obtener ninguno de los anteriores aplicando propiedad de complemento
 
@@ -167,91 +168,56 @@ Adicionalmente poidemos encontrar la probabilidad de no obtener ninguno de los a
 prob_ninguno <- 1 - (prob_escalera + prob_full + prob_triple)
 ```
 
-Probabilidad de no obtener ninguno:
+
+Ordenamos todas las probabilidades de cada suceso en un lanzamiento dentro de un vector:
 ```{r}
-round(prob_ninguno, 4)
-      
+probabilidad_un_solo_lanzamiento <- c("Escalera" = prob_escalera, "Triple" = prob_triple, "Full" = prob_full ,"Ninguno" = prob_ninguno)
+
+probabilidad_un_solo_lanzamiento
 ```
+
 
 Ahora organizaremos los posibles eventos de ganar y sus probabilidades en vectores para facilitar los calculos
 
 ```{r}
-puntos <- c(10, 8, 5, 0)
-probabilidades_por_jugada <- c(prob_escalera, prob_full, prob_triple, prob_ninguno)
+puntos <- c("Escalera" = 10,"Triple" = 5,  "Full" = 8,"Ninguno" = 0)
+puntos
 ```
 
-Calcular la probabilidad de ganar en base a su segunda jugada:
+El usuario gana la partida si acumula 12 puntos o más, por lo que, ahora debemos determinar el resultado en base a un segundo lanzamiento, estos lanzamientos son indeoendientes entre sí
 
-La persona gana si acumula 12 puntos o mas al final de las dos partidas, estas son independientes entre si 
 
-Calcular la suma de puntos para cada combinación posible de dos partidas trabajando con matrices
+Creamos una matriz donde cada celda [i,j] representa la probabilidad de obtener la jugada i en la primera partida y la jugada j en la segunda partida:
 
-# Creamos una matriz donde cada celda [i,j] es puntos_posibles[i] + puntos_posibles[j] y obtenemos los puntamos resultantes:
-```{r}
-suma_puntos_matriz <- outer(puntos, puntos, FUN = "+")
+```{r Matriz probabilidad combinada P(Pi*Pj)}
+prob_combinada <- outer(probabilidad_un_solo_lanzamiento, probabilidad_un_solo_lanzamiento, FUN = "*")
+colnames(prob_combinada) <- names(probabilidad_un_solo_lanzamiento)
+rownames(prob_combinada) <- names(probabilidad_un_solo_lanzamiento)
+
+prob_combinada
 ```
 
-Esto solo nos genera los posibles puntos obtenidos por una sola partida
+Ahora debemos determinar la cantidad de puntos sumados en los 2 lanzamientos, para esto creamos una matriz de combinacion de la suma de puntos de cada suceso:
 
-# 1. Creamos una matriz de probabilidades para la primera partida (como una columna)
-```{r}
-probabilidades_ganar_columna <- as.matrix(probabilidades_por_jugada)
+```{r Matriz suma combinada P(Pi+Pj)}
+puntos_totales_combinados <- outer(puntos, puntos, FUN = "+")
+colnames(puntos_totales_combinados) <- names(puntos)
+rownames(puntos_totales_combinados) <- names(puntos)
+
+puntos_totales_combinados
+```
+Para que el usuario pueda ganar la partida se debe obtener un puntaje mayor o igual a 12, por lo que, usando las matrices creadas anteriormente y aplicando filtrado para sumar los puntajes, obtenemos los siguientes resultados:
+
+```{r Filtrado Puntaje ganador}
+Puntaje_Ganador <- puntos_totales_combinados >= 12
 ```
 
-# 2. Creamos una segunda matriz de probabilidades para la segunda partida (como una fila)
-```{r}
-probabilidades_ganar_fila <- t(probabilidades_ganar_columna)
+
+Por ultimo para hallar la probabilidad de ganar la partida sumamos sumamos las probabilidades que cumplen la condicion de ganar:
+
+```{r Suma puntaje ganar}
+probabilidad_ganar <- sum(prob_combinada[Puntaje_Ganador])
 ```
+La probabilidad de que una persona gane el juego es de 0.026256 obteniendo alguno de los resultados favorables que sumen 12 puntos o más en los dos lanzamientos.
 
-Nota: t() calcula la transpuesta
 
-# 3. Multiplicamos las matrices columna por la matriz fila para obtener la matriz de productos
-Esto es una multiplicación de matrices.
-```{r}
-probabilidad_ganar_combinada <- probabilidades_ganar_columna %*% probabilidades_ganar_fila
-```
-
-Observamos nuestra matriz generada:
-```{r}
-probabilidad_ganar_combinada
-```
-
-Esta matriz representa las probabilidades de cada posible combinación de resultados entre la Partida 1 y la Partida 2
-Como las partidas son independientes, la probabilidad de que ambos eventos ocurran es simplemente el producto de sus probabilidades individuales
-
-# Identificamos las combinaciones donde la suma de puntos es >= 12.
-```{r}
-Puntaje_Ganador <- suma_puntos_matriz >= 12
-```
-
-# Finalmente sumamos las probabilidades solo para las combinaciones donde la suma de puntos sea mayor igual a 12
-Usamos la nueva matriz generada probabilidad_ganar_combinada
-```{r}
-probabilidad_ganar <- sum(probabilidad_ganar_combinada[Puntaje_Ganador])
-```
-
-# Observamos la probabilidad de que una persona gane el juego:
-```{r}
-round(probabilidad_ganar, 4) * 100
-```
-
-Adicionalmente podemos obtener la probabilidad de que una persona pierda el juego aplicando propiedad de complemento:
-
-```{r}
-probabilidad_perder <- 1 - probabilidad_ganar 
-```
-
-Probabilidad de perder:
-```{r}
-round(probabilidad_perder, 4) * 100
-```
-
-# Ultima acotación
-
-Para verificar que todas nuestras probabilidades esten bien definidas, la suma de todos los sucesos y su complemento debe ser igual a 1. Lo verificamos:
-
-```{r}
-prob_escalera + prob_full + prob_triple + prob_ninguno
-```
-
-Se cumple nuestra especificación demostrando asi que las probabilidades estan bien definidas

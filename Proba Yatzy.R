@@ -91,7 +91,7 @@ print(paste("Resultados para Escalera:", total_resultados_escalera))
 
 prob_full <- total_resultados_full / espacio_muestral
 prob_triple <- total_resultados_triple / espacio_muestral
-prob_escalera <- total_resultados_escalera / espacio_muestralç
+prob_escalera <- total_resultados_escalera / espacio_muestral
 
 # Tambien podemos obtener la probabilidad contrario, que la persona no obtenga ningun puntaje
 
@@ -111,6 +111,7 @@ probabilidades_por_jugada <- c(prob_escalera, prob_full, prob_triple, prob_ningu
 # Creamos una matriz donde cada celda [i,j] es puntos_posibles[i] + puntos_posibles[j] y obtenemos los puntamos resultantes:
 suma_puntos_matriz <- outer(puntos_posibles, puntos_posibles, FUN = "+")
 # Nota: Esto solo nos genera los posibles puntos obtenidos por una sola partida
+
 
 # 1. Creamos una matriz de probabilidades para la primera partida (como una columna)
 probabilidades_ganar_columna <- as.matrix(probabilidades_por_jugada)
