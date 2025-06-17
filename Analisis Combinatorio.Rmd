@@ -1,0 +1,40 @@
+---
+title: "Laboratorio Análisis Combinatorio Ejercicio Yatzy"
+author: "Johanna Alvarez y Abraham Soto"
+date: "2025-06-16"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## EJERCICIO YATZY
+Un juego llamado Yatzy consiste en lanzar 5 dados durante 2 partidas independientes; una persona está sola en el casino apostando en este juego, se sabe que gana si logra acumular 12 puntos o más al final. El jugador va acumulando puntos según los resultados obtenidos en cada partida:
+
+- Triple (tres iguales y dos diferentes) = 5 puntos  
+- Full (tres iguales y dos iguales) = 8 puntos  
+- Escalera (menor o mayor) = 10 puntos  
+
+### Notas:NI
+- Escalera menor: 1, 2, 3, 4, 5  
+- Escalera mayor: 2, 3, 4, 5, 6  
+
+De acuerdo con la información suministrada, realice las siguientes actividades: 
+
+1. Resolver el ejercicio y entregarlo en papel, a lapicero, lápiz, marcador, etc.; en hojas de examen; o desarrollarlo en Word o en RMarkdown haciendo uso del entorno RStudio y solamente con R base,mediante filtros u operaciones de conteo a los vectores y/o matrices.
+
+2. Obtenga el espacio muestral 
+
+3. Obtenga los casos favorables a los sucesos: obtener una tercia, un full, una escalera y no obtener ninguno de los resultados anteriores.
+
+4. Obtenga las probabilidades de cada uno de los sucesos anteriores.
+
+5. Obtenga la probabilidad de ganar el juego.
+
+
+Ahora bien, usando paquetes con funciones de generación de permutaciones, variaciones y combinaciones:
+
+6. Replique el proceso para generar los casos posibles de cada uno de los sucesos de los apartados (2) y (3).
+
+7. Verifique que los resultados obtenidos en el apartado (6) se corresponde con lo obtenido en (2) y (3).
