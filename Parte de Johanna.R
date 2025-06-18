@@ -186,18 +186,6 @@ cat("Número total de casos sin combinaciones:", nrow(matriz_nadas), "\n")
 # Mostrar las primeras 10 filas como ejemplo
 print(head(matriz_nadas, 10))
 
-# Para ver toda la matriz en RStudio usa View(matriz_nadas)
-
-
-###Vamos a Crear un data frame que tenga un resumen de todas las posibles combinaciones de cada uno de los sucesos 
-
-resumen <- data.frame(
-  Tipo = c("Triple", "Full", "Escalera", "Nada"),
-  Casos = c(sum(triples), sum(fulls), sum(escaleras), sum(nadas))
-)
-
-View(resumen)
-
 
 
 ##7. Verifique que los resultados obtenidos en el apartado (6) se corresponde con lo obtenido en (2) y (3).
