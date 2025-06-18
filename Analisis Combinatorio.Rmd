@@ -16,7 +16,7 @@ Un juego llamado Yatzy consiste en lanzar 5 dados durante 2 partidas independien
 - Full (tres iguales y dos iguales) = 8 puntos  
 - Escalera (menor o mayor) = 10 puntos  
 
-### Notas:NI
+### Notas:
 - Escalera menor: 1, 2, 3, 4, 5  
 - Escalera mayor: 2, 3, 4, 5, 6  
 
@@ -26,11 +26,265 @@ De acuerdo con la información suministrada, realice las siguientes actividades:
 
 2. Obtenga el espacio muestral 
 
-3. Obtenga los casos favorables a los sucesos: obtener una tercia, un full, una escalera y no obtener ninguno de los resultados anteriores.
+Primeramente, se determinan las variables esenciales del estudio: "caras y número de dados" y a su vez el espacio muestral o el total de posibles resultados.
 
-4. Obtenga las probabilidades de cada uno de los sucesos anteriores.
+```{r Dados}
+caras_dado <- 6
+num_dados <- 5
+```
 
-5. Obtenga la probabilidad de ganar el juego.
+Espacio Muestral para un solo lanzamiento:
+
+```{r Total de resultados posibles 1 lanzamiento}
+espacio_muestral <- caras_dado^num_dados
+espacio_muestral
+```
+
+
+
+##3.Obtenga los casos favorables a los sucesos: obtener una tercia, un full, una escalera y no obtener ninguno de los resultados anteriores.
+
+### 3.1 Obtener los casos favorables de una tercia: 
+
+Cuando se lanza un grupo de cinco dados,  se busca obtener un "Triple" (por ejemplo, 4, 4, 4, 1, 6), lo que nos interesa es la combinación específica de valores que aparecen en esos dados. 
+
+Un "Triple" significa que tres dados muestran el mismo valor, y los otros dos dados muestran valores diferentes entre sí y también diferentes al valor de los tres iguales. Nuestro objetivo es calcular cuántas formas distintas hay de que ocurra esta combinación.
+
+
+Esta es la función de la combinación 6C1, es decir, elegir 1 elemento de un conjunto de 6 que representa al trio:
+```{r}
+opciones_valor_triple_para_Triple <- choose(6, 1)
+```
+
+
+
+Elegir los posibles valores para el par diferente del numero escogido en el trio y entre ellos.
+Esta función corresponde a la combinación 5C2. Indica la selección de dos valores distintos para los dados que restan, luego de haber escogido el valor del trío:
+```{r}
+opciones_valores_diferentes_Triple <- choose(5, 2)
+```
+
+
+Distribución de los 5 dados en las 5 posiciones: El orden seria (X,X,X,Y,Z) por ejemplo (1,1,1,2,3).
+
+Concepto de Coeficiente Multinomial (5! / (3! * 1! * 1!))
+
+Representa las diferentes formas de permutar los valores específicos de los 5 dados una vez que hemos elegido qué números son. Este es un caso de permutaciones con repetición, que se resuelve con la fórmula del coeficiente multinomial:
+```{r}
+distribucion_posiciones_triple <- factorial(5) /
+                                  (factorial(3) * factorial(1) * factorial(1))
+```
+
+Obtener los posibles casos favorables de obtener un Triple
+
+Se obtiene por el producto de las combinaciones y el coeficiente multinomial que calculamos en pasos previos:
+```{r}
+total_resultados_triple <- opciones_valor_triple_para_Triple *
+                           opciones_valores_diferentes_Triple *
+                           distribucion_posiciones_triple
+```
+
+Observamos el total de resultados de obtener un Triple
+```{r}
+total_resultados_triple
+```
+
+Se ha determinado que existen 1200 casos favorables para obtener un "Triple" en un lanzamiento.
+
+### 3.2 Obtener los casos favorables de un full:
+
+Un Full consiste en tres dados de un número y dos dados de un mismo número, los denotamos como (X,X,X,Y,Y) por ejemplo (1,1,1,2,2)
+
+Para este caso contamos n = 5 dados, n1 = 3 dados iguales, n2 = 2 dados iguales pero diferentes al trio.
+
+Elegimos los posibles valores para el trio de Full.
+
+Esta es la función de la combinación 6C1, es decir, elegir 1 elemento de un conjunto de 6 que representa al trio del full
+```{r}
+opciones_valor_triple_para_Full <- choose(6, 1) 
+```
+
+Elegir los posibles valores para obtener el par 
+
+La combinación 5C1 se utiliza para elegir el primer valor del par de caras restantes, asegurando que sea diferente al trío seleccionado.
+```{r}
+opciones_valor_par_Full<- choose(5, 1)
+```
+
+Distribución de Valores en las 5 Posiciones de los Dados
+
+Concepto de Coeficiente Multinomial (5! / (3! * 2!)) En este caso, tenemos 5 dados donde 3 son iguales y 2 son iguales entre ellos pero diferentes al trio. 
+```{r}
+distribucion_posiciones_full <- choose(5, 3)
+```
+
+Se obtiene por el producto de las combinaciones y el coeficiente multinomial que calculamos en pasos previos:
+
+```{r}
+total_resultados_full <- opciones_valor_triple_para_Full *
+                         opciones_valor_par_Full *
+                         distribucion_posiciones_full
+```
+
+Se obtiene el total de casos favorables para obtener un full
+```{r}
+total_resultados_full
+```
+
+Se ha determinado que existen 300 casos favorables para obtener un "full" en un lanzamiento.
+
+### 3.3 Obtener los casos favorables de una escalera (Menor y Mayor)
+
+Existen 2 casos de escalera: menor (1,2,3,4,5) y mayor (2,3,4,5,6) por lo cual podemos observar que se trata de una simple permutacion en ambos casos 
+
+Número de tipos de escaleras (menor y mayor)
+
+Conteo directo
+```{r}
+numero_tipos_escalera <- 2
+```
+
+Obtener los valores para cada tipo de escalera
+
+Es una permutacion de 5! ya que los 5 dados deben mostrar esos 5 valores específicos, y el orden en que aparecen esos valores en los dados importa para el recuento del espacio muestral.
+```{r}
+permutaciones_escalera <- factorial(5)
+```
+
+
+Obtener el producto del factorial por conteo
+```{r}
+total_resultados_escalera <- numero_tipos_escalera * permutaciones_escalera
+```
+
+Observamos el número total de resultados de obtener una Escalera
+```{r}
+total_resultados_escalera
+```
+
+Se ha determinado que existen 240 casos favorables para obtener una "escalera" en un lanzamiento.
+
+### 3.4 Obtener los casos favorables de ninguno
+
+Se aplica la propiedad del complemento, para obtener el resultado:
+```{r}
+total_no_obtener_puntos <- espacio_muestral -  
+                          (total_resultados_escalera + total_resultados_full 
+                         + total_resultados_triple)                          
+```
+
+Observamos el numero total de no obtener ningun punto
+```{r}
+total_no_obtener_puntos
+```
+
+Se ha determinado que existen 6036 de no obtener ninguno de los casos anterios 
+
+
+## 4. Obtenga las probabilidades de cada uno de los sucesos anteriores.
+
+Estos son los resultados de cada suceso en una sola partida ´
+
+```{r}
+prob_full <- total_resultados_full / espacio_muestral
+prob_triple <- total_resultados_triple / espacio_muestral
+prob_escalera <- total_resultados_escalera / espacio_muestral
+```
+
+Tambien se obtiene la probabilidad de no obtener ninguno
+
+```{r}
+prob_ninguno <- 1 - (prob_escalera + prob_full + prob_triple)
+```
+
+```{r}
+prob_full
+prob_triple
+prob_escalera
+prob_ninguno
+```
+
+Comprobación:
+
+Las probabilidades estaran bien definidas si la suma de todas da igual a 1
+```{r}
+prob_full + prob_triple + prob_escalera + prob_ninguno
+```
+
+De esta forma se obtiene las probabilidades definidas de obtener cada uno de los sucesos en un solo lanzamiento dentro del espacio muestral 6^5
+
+## 5. Obtenga la probabilidad de ganar el juego.
+
+Es importante recalcar que ganar el juego se tienen que tomar en cuenta los dos lanzamientos, por ende, el espacio muestral total es 6^10 o multiplicar el espacio muestral de un lanzamiento por si mismo, de esta manera obtenemos el espacio muestral para dos lanzamientos.
+
+```{r}
+espacio_muestral_total <- espacio_muestral * espacio_muestral
+```
+El numero total de casos posibles a obtener en la partida completa es de 60466176
+
+Se organiza el numero de casos totales favorables para un lanzamiento de cada suceso en un vector:
+```{r}
+total_resultados_obtenibles <- c(
+  "Escalera" = total_resultados_escalera,
+  "Triple" = total_resultados_triple,
+  "Full" = total_resultados_full,
+  "Ninguno" = total_no_obtener_puntos
+)
+total_resultados_obtenibles
+```
+Se organiza el numero de puntos obtenidos por cada suceso en un vector:
+```{r}
+puntos <- c("Escalera" = 10,"Triple" = 5,  "Full" = 8,"Ninguno" = 0)
+puntos
+```
+Se organiza las probabilidades de cada suceso de un lanzamiento en un vector:
+```{r}
+probabilidad_un_solo_lanzamiento <- c("Escalera" = prob_escalera, "Triple" = prob_triple, "Full" = prob_full ,"Ninguno" = prob_ninguno)
+
+probabilidad_un_solo_lanzamiento
+```
+
+El usuario gana la partida si acumula 12 puntos o más. Para determinar el resultado final, se procede a un segundo lanzamiento, el cual es independiente del primero.
+
+Se construye una matriz donde cada celda [i,j] indica la probabilidad de obtener el suceso i en el primer lanzamiento y el suceso j en el segundo lanzamiento.
+
+```{r Matriz probabilidad combinada P(Pi*Pj)}
+prob_combinada <- outer(probabilidad_un_solo_lanzamiento, probabilidad_un_solo_lanzamiento, FUN = "*")
+colnames(prob_combinada) <- names(probabilidad_un_solo_lanzamiento)
+rownames(prob_combinada) <- names(probabilidad_un_solo_lanzamiento)
+
+prob_combinada
+```
+Esta matiz representa las probabilidades combinadas entre los sucesos
+
+Para establecer la cantidad total de puntos acumulados en ambos lanzamientos, se procede a crear una matriz que represente la combinación de las sumas de puntos de cada suceso individual.
+
+```{r Matriz suma combinada P(Pi+Pj)}
+puntos_totales_combinados <- outer(puntos, puntos, FUN = "+")
+colnames(puntos_totales_combinados) <- names(puntos)
+rownames(puntos_totales_combinados) <- names(puntos)
+
+puntos_totales_combinados
+```
+
+Para que el usuario pueda ganar la partida se debe obtener un puntaje mayor o igual a 12, por lo que, usando las matrices creadas anteriormente y aplicando filtrado para sumar los puntajes, obtenemos los siguientes resultados:
+
+```{r Filtrado Puntaje ganador}
+Puntaje_Ganador <- puntos_totales_combinados >= 12
+```
+
+
+Por ultimo para hallar la probabilidad de ganar la partida sumamos sumamos las probabilidades que cumplen la condicion de ganar:
+
+```{r Suma puntaje ganar}
+probabilidad_ganar <- sum(prob_combinada[Puntaje_Ganador])
+probabilidad_ganar
+```
+La probabilidad de que una persona gane el juego es de 0.026256 obteniendo alguno de los resultados favorables que sumen 12 puntos o más en los dos lanzamientos.
+
+
+
+
 
 
 Ahora bien, usando paquetes con funciones de generación de permutaciones, variaciones y combinaciones:
